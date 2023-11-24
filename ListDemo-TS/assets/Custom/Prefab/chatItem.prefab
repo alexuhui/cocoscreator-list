@@ -47,7 +47,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 300,
-      "height": 141.39999999999998
+      "height": 257.84000000000003
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -123,7 +123,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        70.69999999999999,
+        128.92000000000002,
         0,
         0,
         0,
@@ -416,8 +416,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 324.7,
-      "height": 141.39999999999998
+      "width": 290,
+      "height": 257.84000000000003
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -429,7 +429,7 @@
       "ctor": "Float64Array",
       "array": [
         76.887,
-        70.69999999999999,
+        128.92000000000002,
         0,
         0,
         0,
@@ -461,7 +461,7 @@
       "__id__": 10
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 12
@@ -481,7 +481,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 250,
-      "height": 178.84
+      "height": 246.84
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -492,8 +492,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        33.068,
-        -10,
+        30,
+        -1,
         0,
         0,
         0,
@@ -527,7 +527,7 @@
     "_enabled": true,
     "_fontFamily": "Arial",
     "_isSystemFontUsed": true,
-    "_N$string": "<color=#00ff00>Rich</c><color=#0fffff>Text</color><color=#00ff00>555555000000000000000bbbbc000000000000000000</c>",
+    "_N$string": "<color=#00ff00>Rich</c><color=#0fffff>Text</color><color=#00ff00>555555000000000000000bbbbc00000000<size=40><b>000</b></size>00000000000000000000000000000000000000</c>",
     "_N$horizontalAlign": 0,
     "_N$fontSize": 30,
     "_N$font": null,
@@ -557,7 +557,7 @@
       "__id__": 10
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 15
@@ -699,8 +699,8 @@
     "_enabled": true,
     "_layoutSize": {
       "__type__": "cc.Size",
-      "width": 324.7,
-      "height": 141.39999999999998
+      "width": 290,
+      "height": 257.84000000000003
     },
     "_resize": 1,
     "_N$layoutType": 2,
@@ -731,8 +731,8 @@
     "_enabled": true,
     "_layoutSize": {
       "__type__": "cc.Size",
-      "width": 324.7,
-      "height": 141.39999999999998
+      "width": 290,
+      "height": 257.84000000000003
     },
     "_resize": 1,
     "_N$layoutType": 1,
@@ -793,7 +793,7 @@
     "_layoutSize": {
       "__type__": "cc.Size",
       "width": 300,
-      "height": 141.39999999999998
+      "height": 257.84000000000003
     },
     "_resize": 1,
     "_N$layoutType": 2,
