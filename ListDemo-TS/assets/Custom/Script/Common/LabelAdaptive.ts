@@ -50,17 +50,17 @@ export default class LabelAdaptive extends cc.Component {
     checkMaxWidth(): boolean {
         let paragraphedStrings = this._string.split('\n');
         let _context = this.label['_assemblerData']["context"]
-        let _fontDesc = this.label["_assembler"]["_getFontDesc"]();
-        console.log(`_context  : ${JSON.stringify(_context)}`)
-        console.log(`_fontDesc  : ${JSON.stringify(_fontDesc)}`)
+        // let _fontDesc = this.label["_assembler"]["_getFontDesc"]();
+        // console.log(`_context  : ${JSON.stringify(_context)}`)
+        // console.log(`_fontDesc  : ${JSON.stringify(_fontDesc)}`)
         let maxLineWidth = 0
-        console.log("paragraphedStrings", JSON.stringify(paragraphedStrings))
+        // console.log("paragraphedStrings", JSON.stringify(paragraphedStrings))
         for (let i = 0; i < paragraphedStrings.length; ++i) {
             let metric = _context["measureText"](paragraphedStrings[i]);
             let paraLength = metric && metric.width || 0;
             maxLineWidth = maxLineWidth > paraLength ? maxLineWidth : paraLength;
 
-            console.log(`paraLength  : ${paraLength}   maxLineWidth : ${maxLineWidth}`)
+            // console.log(`paraLength  : ${paraLength}   maxLineWidth : ${maxLineWidth}`)
             if (maxLineWidth >= this.maxWidth) {
                 maxLineWidth = this.maxWidth
                 break;

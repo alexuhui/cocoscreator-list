@@ -25,119 +25,142 @@ export default class RichTextAdaptive extends cc.Component {
         }
         this._string = value;
         this.checkMaxWidth()
-        this.label.string = this._string
+        this.richText.string = this._string
     }
 
     @property(cc.Integer)
     maxWidth: number = 0;
 
-    private label: cc.RichText = null;
+    private richText: cc.RichText = null;
 
     private lastWidth: number = -1;
 
     start() {
-        // if (CC_EDITOR) {
-        //     return
-        // }
-        this.label = this.getComponent(cc.RichText)
-        if (!this.label) {
+        this.richText = this.getComponent(cc.RichText)
+        if (!this.richText) {
             console.error(`error : LabelAdaptive, there is no component "cc.Label"`)
             this.enabled = false
             return
         }
-        // this.label.overflow = cc.Label.Overflow.RESIZE_HEIGHT
-        this._string = this.label.string
+        this._string = this.richText.string
         this.checkMaxWidth()
     }
 
     checkMaxWidth(): boolean {
         if (!this.enabledInHierarchy) return false;
-
-        console.log("--------------- HtmlTextParser", JSON.stringify(_htmlTextParser))
         let newTextArray = _htmlTextParser.parse(this.string);
-        console.log("--------------- newTextArray", JSON.stringify(newTextArray))
+        let maxLineWidth = 0
+        let tempWidth = 0
+        let changed = false
 
-// for (let i = 0; i < newTextArray.length; ++i) {
-//             let richTextElement = newTextArray[i];
-//             let text = richTextElement.text;
-//             //handle <br/> <img /> tag
-//             if (text === "") {
-//                 if (richTextElement.style && richTextElement.style.newline) {
-//                     continue;
-//                 }
-//                 if (richTextElement.style && richTextElement.style.isImage && this.label.imageAtlas) {
-//                     this.label._addRichTextImageElement(richTextElement);
-//                     continue;
-//                 }
-//             }
-//             let multilineTexts = text.split("\n");
+        outerLoop:
+        for (let i = 0; i < newTextArray.length; ++i) {
+            let richTextElement = newTextArray[i];
+            let text = richTextElement.text;
+            //handle <br/> <img /> tag
+            if (text === "") {
+                if (richTextElement.style && richTextElement.style.newline) {
+                    continue;
+                }
+                if (richTextElement.style && richTextElement.style.isImage && this.richText.imageAtlas) {
+                    tempWidth += this._addRichTextImageElement(richTextElement);
+                    if (tempWidth > this.maxWidth) {
+                        tempWidth = this.maxWidth
+                        break outerLoop;
+                    }
+                    continue;
+                }
+            }
+            let multilineTexts = text.split("\n");
 
-//             for (let j = 0; j < multilineTexts.length; ++j) {
-//                 let labelString = multilineTexts[j];
-//                 if (labelString === "") {
-//                     //for continues \n
-//                     if (this._isLastComponentCR(text)
-//                         && j === multilineTexts.length - 1) {
-//                         continue;
-//                     }
-//                     this._updateLineInfo();
-//                     lastEmptyLine = true;
-//                     continue;
-//                 }
-//                 lastEmptyLine = false;
+            for (let j = 0; j < multilineTexts.length; ++j) {
+                if (j > 0) {
+                    if (tempWidth > maxLineWidth) {
+                        maxLineWidth = tempWidth
+                    }
+                    // 换行
+                    tempWidth = 0
+                }
+                let labelString = multilineTexts[j];
+                if (labelString === "") {
+                    continue;
+                }
 
-//                 if (this.maxWidth > 0) {
-//                     let labelWidth = this._measureText(i, labelString);
-//                     this._updateRichTextWithMaxWidth(labelString, labelWidth, i);
+                let labelWidth = this.richText['_measureText'](i, labelString);
+                tempWidth += labelWidth
+                // console.log('labelString : ', labelString, 'labelWidth : ', labelWidth, "tempWidth : ", tempWidth)
 
-//                     if (multilineTexts.length > 1 && j < multilineTexts.length - 1) {
-//                         this._updateLineInfo();
-//                     }
-//                 }
-//                 else {
-//                     label = this._addLabelSegment(labelString, i);
-//                     labelSize = label.getContentSize();
+                if (tempWidth > this.maxWidth) {
+                    tempWidth = this.maxWidth
+                    break outerLoop;
+                }
+            }
+        }
+        maxLineWidth = Math.min(this.maxWidth, Math.max(maxLineWidth, tempWidth)) 
+        if (maxLineWidth != this.lastWidth) {
+            this.lastWidth = maxLineWidth
+            // this.node.width = this.lastWidth
+            this.richText.maxWidth = this.lastWidth
+            changed = true
+        }
+        // console.log(`------------------------------------- maxLineWidth : ${maxLineWidth}     this.lastWidth : ${this.lastWidth}   this.node.width : ${this.node.width}`)
 
-//                     this._lineOffsetX += labelSize.width;
-//                     if (this._lineOffsetX > this._labelWidth) {
-//                         this._labelWidth = this._lineOffsetX;
-//                     }
-
-//                     if (multilineTexts.length > 1 && j < multilineTexts.length - 1) {
-//                         this._updateLineInfo();
-//                     }
-//                 }
-//             }
-//         }
-//         if (!lastEmptyLine) {
-//             this._linesWidth.push(this._lineOffsetX);
-//         }
-
-//         if (this.maxWidth > 0) {
-//             this._labelWidth = this.maxWidth;
-//         }
-//         this._labelHeight = (this._lineCount + textUtils.BASELINE_RATIO) * this.lineHeight;
-
-//         // trigger "size-changed" event
-//         this.node.setContentSize(this._labelWidth, this._labelHeight);
-
-//         this._updateRichTextPosition();
-//         this._layoutDirty = false;
-        return false
+        return changed
     }
 
-    private test = 0
-    onTestClick() {
-        this.test++
-        if (this.test % 5 === 0)
-            this.string = "bagagke"
-        if (this.test % 5 === 1)
-            this.string = "!#en Content string of label. !#zh 标签显示的文本内容。"
-        if (this.test % 5 === 2)
-            this.string = "!#en"
-        if (this.test % 5 === 3)
-            this.string = "!#en Horizontal Alignment of label. !#zh 文本内容的水平对齐方式。"
-        if (this.test % 5 === 4)
-            this.string = "bagagke\nkdadka kdakdk adkadka55 44545454ad kdakdk 45455dfadad\ndkdkaddkadakdkadkad"
+    // 计算富文本图片宽度，对应cocos-engine 2.4.6， 不同版本可能有差异
+    _addRichTextImageElement(richTextElement: any): number {
+        if (!richTextElement || !this.richText || !this.richText.imageAtlas) {
+            return 0;
+        }
+        let spriteFrameName = richTextElement.style.src;
+        let spriteFrame = this.richText.imageAtlas.getSpriteFrame(spriteFrameName);
+        let imgW = 0
+        if (spriteFrame) {
+            let spriteRect = spriteFrame.getRect();
+            let scaleFactor = 1;
+            let spriteWidth = spriteRect.width;
+            let spriteHeight = spriteRect.height;
+            let expectWidth = richTextElement.style.imageWidth;
+            let expectHeight = richTextElement.style.imageHeight;
+
+            if (expectHeight > 0) {
+                scaleFactor = expectHeight / spriteHeight;
+                spriteWidth = spriteWidth * scaleFactor;
+                spriteHeight = spriteHeight * scaleFactor;
+            }
+            else {
+                scaleFactor = this.richText.lineHeight / spriteHeight;
+                spriteWidth = spriteWidth * scaleFactor;
+                spriteHeight = spriteHeight * scaleFactor;
+            }
+
+            if (expectWidth > 0) spriteWidth = expectWidth;
+
+            // console.log('richTextElement : ', JSON.stringify(richTextElement), "spriteWidth : ", spriteWidth)
+            imgW = spriteWidth
+        }
+        return imgW;
+    }
+
+    private _test = 0
+    private _testCnt = 5
+    onRichTextTest() {
+        switch (this._test++ % this._testCnt) {
+            case 0:
+                this.string = `<color=#00ff00>Rich ttttt bbbbb</c><color=#0fffff>ggggg hh<img src='icon_history_item_ball'/>hh Text</color><color=#00ff00>Rich</c><color=#0fffff>Text</color><color=#00ff00>Rich </c><color=#0fffff><b>bbbbb</b> Text</color><img src='icon_history_item_ball'/><img src='icon_level_reward_end'/>`
+                break;
+            case 1:
+                this.string = `<color=#00ff00>Rich</c>`
+                break;
+            case 2:
+                this.string = `<color=#00ff00>Rich\ntext</c>`
+                break;
+            case 3:
+                this.string = `<color=#00ff00>Rich \nttttt bbbbb</c><color=#0fffff>ggggg hh<img src='icon_history_item_ball'/>hh Text</color><color=#00ff00>Rich</c><color=#0fffff>Text</color><color=#00ff00>Rich </c><color=#0fffff><b>bbbbb</b> Text</color><img src='icon_history_item_ball'/><img src='icon_level_reward_end'/>`
+                break;
+            default:
+                this.string = 'default'
+        }
     }
 }
