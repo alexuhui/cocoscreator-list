@@ -210,7 +210,7 @@ export default class ChatView extends cc.Component {
     }
 
     onListRender(item: any, idx: number) {
-        console.log(`${idx} : ${JSON.stringify(item)}   `)
+        // console.log(`${idx} : ${JSON.stringify(item)}   `)
     }
 
     btnPlusEv(ev: any, data: any) {

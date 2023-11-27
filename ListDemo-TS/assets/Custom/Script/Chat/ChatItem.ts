@@ -42,7 +42,7 @@ export default class ChatItem extends ListItem {
     }
 
     onRenderItem(data: any, idx: number) {
-        console.log(`${idx} : ${JSON.stringify(data)}   `)
+        // console.log(`${idx} : ${JSON.stringify(data)}   `)
         
         const avatarNode: any = this.avatarNode;
         const avatar: any = this.avatar;
