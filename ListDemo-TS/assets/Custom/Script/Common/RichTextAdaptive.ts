@@ -14,18 +14,21 @@ const { ccclass, property, menu, requireComponent } = cc._decorator;
 @menu("自定义组件/Common/RichTextAdaptive")
 @requireComponent(cc.RichText)
 export default class RichTextAdaptive extends cc.Component {
+    // @property()
     private _string: string = ""
-    get string(): string {
-        return this._string;
-    }
-
+    // @property(cc.String)
     set string(value: string) {
         if (this._string === value) {
             return;
         }
         this._string = value;
         this.checkMaxWidth()
-        this.richText.string = this._string
+        if (this.richText) {
+            this.richText.string = this._string
+        }
+    }
+    get string(): string {
+        return this._string;
     }
 
     @property(cc.Integer)
@@ -42,12 +45,15 @@ export default class RichTextAdaptive extends cc.Component {
             this.enabled = false
             return
         }
-        this._string = this.richText.string
+        if (!this._string) {
+            this._string = this.richText.string
+        }
         this.checkMaxWidth()
+        this.richText.string = this._string
     }
 
     checkMaxWidth(): boolean {
-        if (!this.enabledInHierarchy) return false;
+        if (!this.richText || !this.enabledInHierarchy) return false;
         let newTextArray = _htmlTextParser.parse(this.string);
         let maxLineWidth = 0
         let tempWidth = 0
@@ -96,7 +102,7 @@ export default class RichTextAdaptive extends cc.Component {
                 }
             }
         }
-        maxLineWidth = Math.min(this.maxWidth, Math.max(maxLineWidth, tempWidth)) 
+        maxLineWidth = Math.min(this.maxWidth, Math.max(maxLineWidth, tempWidth))
         if (maxLineWidth != this.lastWidth) {
             this.lastWidth = maxLineWidth
             // this.node.width = this.lastWidth

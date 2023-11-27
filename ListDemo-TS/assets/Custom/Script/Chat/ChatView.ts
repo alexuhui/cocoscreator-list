@@ -22,6 +22,38 @@ export default class ChatView extends cc.Component {
         this.data = [
             {
                 type: 3,
+                text: '7月10日 23:56'
+            },
+            {
+                type: 2,
+                text: '<color=#cc6600>拜金主义</color>——！'
+            },
+            {
+                type: 1,
+                text: '<color=#cc6600>拜金主义</color>——！'
+            },
+            {
+                type: 2,
+                text: '<color=#cc6600>拜金主义</color>——！'
+            },
+            {
+                type: 1,
+                text: '<color=#cc6600>拜金主义</color>的毒虫——！'
+            },
+            {
+                type: 1,
+                text: '<color=#cc6600>拜金主义</color>——！'
+            },
+            {
+                type: 2,
+                text: '<color=#cc6600>拜金主义</color>——！'
+            },
+            {
+                type: 1,
+                text: '<color=#cc6600>拜金主义</color>——！'
+            },
+            {
+                type: 3,
                 text: '8月30日 1:37'
             },
             {
