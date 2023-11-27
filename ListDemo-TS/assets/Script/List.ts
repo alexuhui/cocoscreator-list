@@ -248,6 +248,18 @@ export default class List extends cc.Component {
     private _cyclicNum: number;
     private _cyclicPos1: number;
     private _cyclicPos2: number;
+
+    // 列表数据
+    private _itemDatas: any[] = [];
+    set itemDatas(datas: any[]) {
+        this._itemDatas = datas;
+        this.numItems = this._itemDatas.length;
+        // console.log(` _itemDatas : ${JSON.stringify(this._itemDatas)}`)
+    }
+    get itemDatas(){
+        return this._itemDatas;
+    }
+
     //列表数量
     @property({
         serializable: false
@@ -1503,16 +1515,18 @@ export default class List extends cc.Component {
                 listItem.list = this;
                 listItem._registerEvent();
             }
-            if (this.renderEvent) {
-                cc.Component.EventHandler.emitEvents([this.renderEvent], item, data.id % this._actualNumItems);
-            }
+            // if (this.renderEvent) {
+            //     cc.Component.EventHandler.emitEvents([this.renderEvent], item, data.id % this._actualNumItems);
+            // }
+            this.renderItem(item, data.id % this._actualNumItems)
         } else if (this._forceUpdate && this.renderEvent) { //强制更新
             item.setPosition(cc.v2(data.x, data.y));
             this._resetItemSize(item);
             // cc.log('ADD::', data.id, item);
-            if (this.renderEvent) {
-                cc.Component.EventHandler.emitEvents([this.renderEvent], item, data.id % this._actualNumItems);
-            }
+            // if (this.renderEvent) {
+            //     cc.Component.EventHandler.emitEvents([this.renderEvent], item, data.id % this._actualNumItems);
+            // }
+            this.renderItem(item, data.id % this._actualNumItems)
         }
         this._resetItemSize(item);
 
@@ -1536,16 +1550,18 @@ export default class List extends cc.Component {
                 listItem.list = this;
                 listItem._registerEvent();
             }
-            if (this.renderEvent) {
-                cc.Component.EventHandler.emitEvents([this.renderEvent], item, listId % this._actualNumItems);
-            }
+            // if (this.renderEvent) {
+            //     cc.Component.EventHandler.emitEvents([this.renderEvent], item, listId % this._actualNumItems);
+            // }
+            this.renderItem(item, listId % this._actualNumItems)
         } else if (this._forceUpdate && this.renderEvent) { //强制更新
             item._listId = listId;
             if (listItem)
                 listItem.listId = listId;
-            if (this.renderEvent) {
-                cc.Component.EventHandler.emitEvents([this.renderEvent], item, listId % this._actualNumItems);
-            }
+            // if (this.renderEvent) {
+            //     cc.Component.EventHandler.emitEvents([this.renderEvent], item, listId % this._actualNumItems);
+            // }
+            this.renderItem(item, listId % this._actualNumItems)
         }
         this._updateListItem(listItem);
         if (this._lastDisplayData.indexOf(listId) < 0) {
@@ -1662,8 +1678,9 @@ export default class List extends cc.Component {
         for (let n: number = 0, len: number = args.length; n < len; n++) {
             let listId: number = args[n];
             let item: any = this.getItemByListId(listId);
-            if (item)
-                cc.Component.EventHandler.emitEvents([this.renderEvent], item, listId % this._actualNumItems);
+            // if (item)
+            //     cc.Component.EventHandler.emitEvents([this.renderEvent], item, listId % this._actualNumItems);
+            this.renderItem(item, listId % this._actualNumItems)
         }
     }
     /**
@@ -2070,7 +2087,8 @@ export default class List extends cc.Component {
         let temp: any = cc.instantiate(t._itemTmp);
         t.content.addChild(temp);
         for (let n: number = 0; n < numItems; n++) {
-            cc.Component.EventHandler.emitEvents([t.renderEvent], temp, n);
+            // cc.Component.EventHandler.emitEvents([t.renderEvent], temp, n);
+            this.renderItem(temp, n)
             if (temp.height != t._itemSize.height || temp.width != t._itemSize.width) {
                 t._customSize[n] = t._sizeType ? temp.height : temp.width;
             }
@@ -2081,5 +2099,24 @@ export default class List extends cc.Component {
         if (temp.destroy)
             temp.destroy();
         return t._customSize;
+    }
+
+    /** 刷新单个item */
+    private renderItem(item: any, idx: number): void {
+        if (!this._itemDatas || this._itemDatas.length < idx || !this._itemDatas[idx]) {
+            console.error(`data is null, this.itemDatas.length = ${this._itemDatas ? this._itemDatas.length : 0}  index = ${idx}`)
+            return
+        }
+        const itemData = this._itemDatas[idx]
+        // console.log(item)
+        const com = item.getComponent(ListItem)
+        if (com) {
+            com.renderItem(itemData)
+        } else {
+            console.warn(`${item.name} 未绑定 "ListItem" 组件`)
+        }
+        if (this.renderEvent) {
+            cc.Component.EventHandler.emitEvents([this.renderEvent], itemData, item, idx);
+        }
     }
 }

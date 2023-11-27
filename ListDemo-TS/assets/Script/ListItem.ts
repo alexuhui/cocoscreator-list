@@ -21,12 +21,12 @@ enum SelectedType {
 @menu('自定义组件/List Item')
 @executionOrder(-5001)          //先于List
 export default class ListItem extends cc.Component {
-    //图标
-    @property({ type: cc.Sprite, tooltip: CC_DEV && '图标' })
-    icon: cc.Sprite = null;
-    //标题
-    @property({ type: cc.Node, tooltip: CC_DEV && '标题' })
-    title: cc.Node = null;
+    // //图标
+    // @property({ type: cc.Sprite, tooltip: CC_DEV && '图标' })
+    // icon: cc.Sprite = null;
+    // //标题
+    // @property({ type: cc.Node, tooltip: CC_DEV && '标题' })
+    // title: cc.Node = null;
     //选择模式
     @property({
         type: cc.Enum(SelectedType),
@@ -185,4 +185,19 @@ export default class ListItem extends cc.Component {
         this.list.selectedId = this.listId;
     }
 
+    /** 由list调用，不要在业务逻辑主动调用该方法，除非你知道你在干什么 */
+    renderItem(data: any, item: any, idx: number): void {
+        if (this.onRenderItem) {
+            this.onRenderItem(data, idx)
+        }
+    }
+
+    /** 
+     * 子类重写，处理业务 
+     * @param {any} data item 数据
+     * @param {number} idx item 下标
+     */
+    onRenderItem(data: any, idx: number): void {
+        console.warn(`${this.name} : 子类未实现 "onRenderItem" 方法，item类应该重写该方法来处理业务`)
+    }
 }
