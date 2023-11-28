@@ -28,7 +28,7 @@ export default class TestBag extends cc.Component {
         this.onPageChange();
     }
 
-    onListRender(item: cc.Node, idx: number) {
+    onListRender(data: any, item: cc.Node, idx: number) {
         if (item.childrenCount) {
             for (let n = 0; n < item.childrenCount; n++) {
                 let bi: any = item.children[n];

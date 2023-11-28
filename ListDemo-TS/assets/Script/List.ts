@@ -256,7 +256,7 @@ export default class List extends cc.Component {
         this.numItems = this._itemDatas.length;
         // console.log(` _itemDatas : ${JSON.stringify(this._itemDatas)}`)
     }
-    get itemDatas(){
+    get itemDatas() {
         return this._itemDatas;
     }
 
@@ -2103,15 +2103,17 @@ export default class List extends cc.Component {
 
     /** 刷新单个item */
     private renderItem(item: any, idx: number): void {
+        let itemData = null
         if (!this._itemDatas || this._itemDatas.length < idx || !this._itemDatas[idx]) {
-            console.error(`data is null, this.itemDatas.length = ${this._itemDatas ? this._itemDatas.length : 0}  index = ${idx}`)
-            return
+            console.warn(`data is null, this.itemDatas.length = ${this._itemDatas ? this._itemDatas.length : 0}  index = ${idx}`)
+        } else {
+            itemData = this._itemDatas[idx]
         }
-        const itemData = this._itemDatas[idx]
+
         // console.log(item)
         const com = item.getComponent(ListItem)
         if (com) {
-            com.renderItem(itemData)
+            com.renderItem(itemData, item, idx)
         } else {
             console.warn(`${item.name} 未绑定 "ListItem" 组件`)
         }
