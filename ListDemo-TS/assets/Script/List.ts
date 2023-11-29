@@ -253,11 +253,15 @@ export default class List extends cc.Component {
     private _itemDatas: any[] = [];
     set itemDatas(datas: any[]) {
         this._itemDatas = datas;
+        console.log(`num : ${this.numItems}     _itemDatas : ${JSON.stringify(this._itemDatas)}`)
         this.numItems = this._itemDatas.length;
-        // console.log(` _itemDatas : ${JSON.stringify(this._itemDatas)}`)
     }
     get itemDatas() {
         return this._itemDatas;
+    }
+
+    setItemDatas(datas: any[]) {
+        this.itemDatas = datas
     }
 
     //列表数量
@@ -688,7 +692,7 @@ export default class List extends cc.Component {
     _resizeContent() {
         let t: any = this;
         let result: number;
-
+        // cc.log(`---------------- _resizeContent`)
         switch (t._align) {
             case cc.Layout.Type.HORIZONTAL: {
                 if (t._customSize) {
@@ -1480,6 +1484,7 @@ export default class List extends cc.Component {
      * @param {Object} data 数据
      */
     _createOrUpdateItem(data: any) {
+        // cc.log(`----------------- _createOrUpdateItem : data = ${JSON.stringify(data)}`)
         let item: any = this.getItemByListId(data.id);
         if (!item) { //如果不存在
             let canGet: boolean = this._pool.size() > 0;
@@ -1537,6 +1542,7 @@ export default class List extends cc.Component {
     }
     //创建或更新Item（非虚拟列表用）
     _createOrUpdateItem2(listId: number) {
+        // cc.log(`----------------- _createOrUpdateItem2 : listId = ${listId}`)
         let item: any = this.content.children[listId];
         let listItem: ListItem;
         if (!item) { //如果不存在

@@ -53,7 +53,7 @@ export default class ChatItem extends ListItem {
         let h: number;
         let minH: number = 80;
         let offset: number = 43;
-        console.log(`------------------------- data.text : ${data.text}`)
+        // console.log(`------------------------- data.text : ${data.text}`)
         switch (data.type) {
             case 1://对方
                 this.avatarNode.x = -170;
@@ -89,6 +89,6 @@ export default class ChatItem extends ListItem {
                 break;
         }
 
-        console.log(`item pos : ${this.node.getPosition().toString()} itme size : ${this.node.getContentSize().toString()}  bg pos : ${this.chatBg.node.getPosition().toString()}  bg size : ${this.chatBg.node.getContentSize().toString()}`)
+        // console.log(`item pos : ${this.node.getPosition().toString()} itme size : ${this.node.getContentSize().toString()}  bg pos : ${this.chatBg.node.getPosition().toString()}  bg size : ${this.chatBg.node.getContentSize().toString()}`)
     }
 }
