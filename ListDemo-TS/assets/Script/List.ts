@@ -253,7 +253,7 @@ export default class List extends cc.Component {
     private _itemDatas: any[] = [];
     set itemDatas(datas: any[]) {
         this._itemDatas = datas;
-        console.log(`num : ${this.numItems}     _itemDatas : ${JSON.stringify(this._itemDatas)}`)
+        // console.log(`num : ${this.numItems}     _itemDatas : ${JSON.stringify(this._itemDatas)}`)
         this.numItems = this._itemDatas.length;
     }
     get itemDatas() {
